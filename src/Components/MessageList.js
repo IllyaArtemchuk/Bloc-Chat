@@ -21,23 +21,30 @@ class MessageList extends Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.activeRoom !== this.props.activeRoom) {
+      this.getActiveMessages()
+    }
+  }
+
   getActiveMessages() {
     var validMessages = []
     for(let i=0;i < this.state.messages.length; i++) {
-      if (this.state.messages[i].roomId === this.props.activeRoom) {
+      if (this.state.messages[i].roomId == this.props.activeRoomID) {
         validMessages.push(this.state.messages[i])
       }
     }
-    console.log("updated active messages");
     this.setState({ renderedMessages: validMessages });
   }
+
+
 
 
 
   render() {
     return (
       <div>
-       <h2 onChange={ () => this.getActiveMessages()}> {this.props.activeRoom} </h2>
+       <h2 > {this.props.activeRoom} </h2>
        {this.state.renderedMessages.map((message) =>
        <div key={message.key}>
       <p> {message.Username} </p>
