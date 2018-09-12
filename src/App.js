@@ -3,7 +3,6 @@ import './App.css';
 import * as firebase from "firebase";
 import RoomList from "./Components/RoomList"
 
-
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyCYGhIAx9C3m1cZm752PrTS2sVNIGVwzFo",
