@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import * as firebase from 'firebase';
 
 
 
@@ -19,14 +18,15 @@ class RoomList extends Component {
     this.roomsRef.on("child_added", snapshot => {
       const room = snapshot.val();
       room.key = snapshot.key;
-      this.setState({ rooms: this.state.rooms.concat(room) });
+      this.setState({ rooms: this.state.rooms.concat(room) })
     });
+    console.log(this.state.rooms);
   }
   render() {
     return(
       <div>
-      {this.state.rooms.map( ( room) =>
-      <div key= {room.key} > {room} </div>
+      {this.state.rooms.map((room) =>
+      <div key= {room.key} > {room.name} </div>
     )}
       </div>
     )
