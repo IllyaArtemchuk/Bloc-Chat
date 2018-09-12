@@ -16,6 +16,7 @@ createRoom(e) {
     this.props.roomsRef.push({
        name: this.state.newRoomName
     });
+    this.setState({ newRoomName: "" })
       }
 
 handleChange(e) {

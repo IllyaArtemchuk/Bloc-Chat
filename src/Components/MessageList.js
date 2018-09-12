@@ -5,7 +5,8 @@ class MessageList extends Component {
     super(props);
 
     this.state = {
-      messages: []
+      messages: [],
+      renderedMessages: []
     }
 
     this.messagesRef = this.props.firebase.database().ref('messages');
@@ -16,26 +17,33 @@ class MessageList extends Component {
     this.messagesRef.on("child_added", snapshot => {
       const message = snapshot.val();
       message.key = snapshot.key
-      this.setState({ rooms: this.state.messages.concat(message) })
+      this.setState({ messages: this.state.messages.concat(message) })
     });
   }
 
-  logMessage() {
-    console.log(this.state.messages)
+  getActiveMessages() {
+    var validMessages = []
+    for(let i=0;i < this.state.messages.length; i++) {
+      if (this.state.messages[i].roomId === this.props.activeRoom) {
+        validMessages.push(this.state.messages[i])
+      }
+    }
+    console.log("updated active messages");
+    this.setState({ renderedMessages: validMessages });
   }
+
 
 
   render() {
     return (
       <div>
-       <h2 onClick={() => this.logMessage()}> {this.props.activeRoom} </h2>
-       {this.state.messages.map((message) =>
+       <h2 onChange={ () => this.getActiveMessages()}> {this.props.activeRoom} </h2>
+       {this.state.renderedMessages.map((message) =>
        <div key={message.key}>
       <p> {message.Username} </p>
       <p> {message.content} </p>
       <p> {message.sendAt} </p>
        </div>
-
        )}
       </div>
 
