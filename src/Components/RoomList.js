@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import AddRoom from "./AddRoom"
 
+const RoomsPosition=  {
+  float: "left",
+  backgroundColor: "rgb(81, 98, 127)",
+  height: "100vw",
+  color: "white"
+}
 
 class RoomList extends Component {
   constructor(props) {
@@ -20,15 +26,14 @@ class RoomList extends Component {
       room.key = snapshot.key;
       this.setState({ rooms: this.state.rooms.concat(room) })
     });
-    console.log(this.state.rooms);
   }
 
 
   render() {
     return(
-      <div>
+      <div style={RoomsPosition}>
       {this.state.rooms.map((room) =>
-      <div key= {room.key} > {room.name} </div>
+      <div key= {room.key} onClick={this.props.changeRoom} > {room.name} </div>
     )}
     <AddRoom roomsRef={this.roomsRef} rooms={this.state.rooms}/>
       </div>

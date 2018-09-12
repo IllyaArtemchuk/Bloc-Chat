@@ -3,6 +3,12 @@ import './App.css';
 import * as firebase from "firebase";
 import RoomList from "./Components/RoomList"
 
+const Header = {
+  backgroundColor:"rgb(167, 171, 178)",
+  height:"10vw",
+  marginBottom:"-.1vw",
+  marginTtop:"-2vw"
+}
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyCYGhIAx9C3m1cZm752PrTS2sVNIGVwzFo",
@@ -15,12 +21,26 @@ import RoomList from "./Components/RoomList"
   firebase.initializeApp(config);
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      activeRoomKey: "1"
+    };
+  }
+
+  changeRoom() {
+    this.setState({ activeRoomKey: this.key});
+    console.log(this.state.activeRoomKey);
+  }
+
+
   render() {
     return (
       <div className="App">
-      <h1> Bloc Chat </h1>
+      <h1 style={Header}> Bloc Chat </h1>
       <RoomList
-         firebase={firebase}/>
+         firebase={firebase} changeRoom={() => this.changeRoom()}/>
       </div>
     );
   }
