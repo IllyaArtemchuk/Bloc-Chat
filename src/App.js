@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import * as firebase from "firebase";
 import RoomList from "./Components/RoomList"
+import MessageList from "./Components/MessageList"
 
 const Header = {
   backgroundColor:"rgb(167, 171, 178)",
@@ -25,13 +26,13 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activeRoomKey: "1"
+      activeRoom: ""
     };
   }
 
-  changeRoom() {
-    this.setState({ activeRoomKey: this.key});
-    console.log(this.state.activeRoomKey);
+  changeRoom(room) {
+    this.setState({ activeRoom: room});
+    console.log(this.state.activeRoom);
   }
 
 
@@ -40,7 +41,9 @@ class App extends Component {
       <div className="App">
       <h1 style={Header}> Bloc Chat </h1>
       <RoomList
-         firebase={firebase} changeRoom={() => this.changeRoom()}/>
+         firebase={firebase} changeRoom={this.changeRoom.bind(this)}/>
+
+      <MessageList activeRoom={this.state.activeRoom.name} firebase={firebase}/>
       </div>
     );
   }
