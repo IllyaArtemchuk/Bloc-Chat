@@ -26,15 +26,21 @@ componentDidMount() {
 });
 }
 
+userExists() {
+  if (this.props.user !== null) {
+    return <p> Greetings, {this.props.user.displayName} </p>
+  }
+  else {
+    return <p> Greetings, Guest </p>
+       }
+     }
 
   render() {
     return (
     <div>
      <button onClick={() => this.handleSignIn()}>Sign In</button>
      <button onClick={()=> this.handleSignOut()}>Sign Out</button>
-     <p>
-     Greetings, {this.props.user.displayName}.
-     </p>
+     {this.userExists()}
     </div>
 
     )
