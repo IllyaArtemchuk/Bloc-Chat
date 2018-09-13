@@ -45,13 +45,22 @@ class MessageList extends Component {
     return (
       <div>
        <h2 > {this.props.activeRoom} </h2>
+       <table>
+       <colgroup>
+       <col id="Username" />
+       <col id="ChatMessage" />
+       <col id="MessageSentAt" />
+       </colgroup>
+       <tbody>
        {this.state.renderedMessages.map((message) =>
-       <div key={message.key}>
-      <p> {message.Username} </p>
-      <p> {message.content} </p>
-      <p> {message.sendAt} </p>
-       </div>
+       <tr key={ message.key }>
+       <td> {message.Username} </td>
+       <td> {message.content} </td>
+       <td> {message.sendAt} </td>
+       </tr>
        )}
+       </tbody>
+       </table>
       </div>
 
     )
