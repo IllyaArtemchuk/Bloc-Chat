@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 import * as firebase from "firebase";
-import RoomList from "./Components/RoomList"
-import MessageList from "./Components/MessageList"
+import RoomList from "./Components/RoomList";
+import MessageList from "./Components/MessageList";
+import User from "./Components/User";
+
 
 const Header = {
   backgroundColor:"rgb(167, 171, 178)",
@@ -26,12 +28,18 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activeRoom: ""
+      activeRoom: "",
+      user: ""
     };
   }
 
   changeRoom(room) {
     this.setState({ activeRoom: room});
+  }
+
+  setUser(user) {
+    this.setState({ user: user});
+    console.log( this.state.user )
   }
 
 
@@ -43,6 +51,7 @@ class App extends Component {
          firebase={firebase} changeRoom={this.changeRoom.bind(this)}/>
 
       <MessageList activeRoomID={this.state.activeRoom.key} activeRoom={this.state.activeRoom.name} firebase={firebase}/>
+      <User firebase={firebase} setUser={this.setUser.bind(this)} user={this.state.user}/>
       </div>
     );
   }
