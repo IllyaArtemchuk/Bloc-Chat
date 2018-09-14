@@ -35,11 +35,11 @@ class App extends Component {
 
   changeRoom(room) {
     this.setState({ activeRoom: room});
+    console.log(this.state.activeRoom)
   }
 
   setUser(user) {
     this.setState({ user: user});
-    console.log( this.state.user )
   }
 
 
@@ -50,7 +50,7 @@ class App extends Component {
       <RoomList
          firebase={firebase} changeRoom={this.changeRoom.bind(this)}/>
 
-      <MessageList activeRoomID={this.state.activeRoom.key} activeRoom={this.state.activeRoom.name} firebase={firebase}/>
+      <MessageList activeRoomID={this.state.activeRoom.key} activeRoom={this.state.activeRoom} firebase={firebase} user={ this.state.user }/>
       <User firebase={firebase} setUser={this.setUser.bind(this)} user={this.state.user}/>
       </div>
     );
