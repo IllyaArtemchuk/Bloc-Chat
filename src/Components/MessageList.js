@@ -7,8 +7,8 @@ class MessageList extends Component {
     super(props);
 
     this.state = {
-      messages: ["empty"],
-      renderedMessages: ["empty"]
+      messages: [],
+      renderedMessages: []
     }
 
     this.messagesRef = this.props.firebase.database().ref('messages');
@@ -16,7 +16,11 @@ class MessageList extends Component {
   }
 
 
-  componentDidMount() {
+  componentWillMount() {
+    this.getMessageSnapshot()
+  }
+
+  getMessageSnapshot() {
     this.messagesRef.on("child_added", snapshot => {
       const message = snapshot.val();
       message.key = snapshot.key
@@ -68,7 +72,18 @@ class MessageList extends Component {
     this.setState({ renderedMessages: validMessages });
   }
 
+  messageDelete() {
 
+  }
+
+  isUserGuest() {
+    if (this.props.user == null) {
+      return "Guest"
+    }
+    else {
+      return this.props.user.displayName
+    }
+  }
 
 
 
@@ -78,6 +93,7 @@ class MessageList extends Component {
        <h2> {this.props.activeRoom != ""?this.props.activeRoom.name: "Select a Room"} </h2>
        <table>
        <colgroup>
+       <col id="Delete Button" />
        <col id="Username" />
        <col id="ChatMessage" />
        <col id="MessageSentAt" />
@@ -85,6 +101,7 @@ class MessageList extends Component {
        <tbody>
        {this.state.renderedMessages.map((message) =>
        <tr key={ message.key }>
+       <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete()}> Delete </button>):" "}</td>
        <td> {message.Username} </td>
        <td> {message.content} </td>
        <td> {message.sendAt} </td>
@@ -92,7 +109,7 @@ class MessageList extends Component {
        )}
        </tbody>
        </table>
-       <AddMessage messagesRef={this.messagesRef} user={this.props.user} firebase={this.props.firebase} activeRoomID={this.props.activeRoomID} activeRoom={this.props.activeRoom}/>
+       <AddMessage messages={this.state.messages} getMessageSnapshot={this.getMessageSnapshot.bind(this)} getActiveMessages={this.getActiveMessages.bind(this)} messagesRef={this.messagesRef} user={this.props.user} firebase={this.props.firebase} activeRoomID={this.props.activeRoomID} activeRoom={this.props.activeRoom} isUserGuest={this.isUserGuest.bind(this)}/>
       </div>
 
     )

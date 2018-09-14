@@ -13,23 +13,21 @@ class AddMessage extends Component {
 
   createMessage(e) {
     e.preventDefault();
+    if (!this.state.newMessage) {return}
     this.props.messagesRef.push({
-     Username:this.isUserGuest(),
+     Username:this.props.isUserGuest(),
      content:this.state.newMessage,
      roomId:this.props.activeRoomID,
      sendAt: this.props.firebase.database.ServerValue.TIMESTAMP
    });
     this.setState ({newMessage: "" })
+    this.props.getActiveMessages();
   }
 
-  isUserGuest() {
-    if (this.props.user == null) {
-      return "Guest"
-    }
-    else {
-      return this.props.user.displayName
-    }
-  }
+ componentDidMount() {
+   if(this.props.messages != [])
+     { this.props.getActiveMessages(); }
+ }
 
   handleChange(e) {
       this.setState({ newMessage: e.target.value })

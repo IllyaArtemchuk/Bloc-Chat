@@ -13,6 +13,7 @@ class AddRoom extends Component {
 
 createRoom(e) {
     e.preventDefault();
+    if (!this.state.newRoomName) {return}
     this.props.roomsRef.push({
        name: this.state.newRoomName
     });
