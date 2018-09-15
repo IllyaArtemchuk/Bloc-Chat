@@ -16,11 +16,7 @@ class MessageList extends Component {
   }
 
 
-  componentWillMount() {
-    this.getMessageSnapshot()
-  }
-
-  getMessageSnapshot() {
+  componentDidMount() {
     this.messagesRef.on("child_added", snapshot => {
       const message = snapshot.val();
       message.key = snapshot.key
@@ -28,23 +24,23 @@ class MessageList extends Component {
     })
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.activeRoom.name !== this.props.activeRoom.name) {
-      this.getActiveMessages();
+
+  messageDelete() {
+
+  }
+
+  isUserGuest() {
+    if (this.props.user == null) {
+      return "Guest"
+    }
+    else {
+      return this.props.user.displayName
     }
   }
 
-  getActiveMessages() {
-    var validMessages = []
-    for(let i=0;i < this.state.messages.length; i++) {
-      if (this.state.messages[i].roomId == this.props.activeRoomID) {
-        validMessages.push(this.state.messages[i])
-      }
-    }
-    for(let i=0;i < validMessages.length; i++){
-      let ms = validMessages[i].sendAt;
+  formatTime(time) {
+      let ms = time;
       let dateMessage = new Date(ms)
-      function formatTime() {
         let month = dateMessage.getMonth()+1;
         let day = dateMessage.getDate();
         let hours = 0;
@@ -66,25 +62,23 @@ class MessageList extends Component {
         }
         return (month+"/"+day+" "+hours+":"+minutes+" "+ampm)
       }
-     var fullDate = formatTime()
-      validMessages[i].sendAt = fullDate
-    }
-    this.setState({ renderedMessages: validMessages });
+
+  renderRoomMessages() {
+  if(this.state.messages[0] === undefined) {return}
+  let validMessages = [];
+  for(let i=0;i < this.state.messages.length;i++){
+    if (this.state.messages[i].roomId == this.props.activeRoomID) {
+      validMessages.push(this.state.messages[i])}
   }
-
-  messageDelete() {
-
+  return(validMessages.map((message) =>
+  <tr key={ message.key }>
+  <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete()}> Delete </button>):" "}</td>
+  <td> {message.Username} </td>
+  <td> {message.content} </td>
+  <td> {this.formatTime(message.sendAt)} </td>
+  </tr>
+))
   }
-
-  isUserGuest() {
-    if (this.props.user == null) {
-      return "Guest"
-    }
-    else {
-      return this.props.user.displayName
-    }
-  }
-
 
 
   render() {
@@ -99,17 +93,10 @@ class MessageList extends Component {
        <col id="MessageSentAt" />
        </colgroup>
        <tbody>
-       {this.state.renderedMessages.map((message) =>
-       <tr key={ message.key }>
-       <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete()}> Delete </button>):" "}</td>
-       <td> {message.Username} </td>
-       <td> {message.content} </td>
-       <td> {message.sendAt} </td>
-       </tr>
-       )}
+       {this.renderRoomMessages()}
        </tbody>
        </table>
-       <AddMessage messages={this.state.messages} getMessageSnapshot={this.getMessageSnapshot.bind(this)} getActiveMessages={this.getActiveMessages.bind(this)} messagesRef={this.messagesRef} user={this.props.user} firebase={this.props.firebase} activeRoomID={this.props.activeRoomID} activeRoom={this.props.activeRoom} isUserGuest={this.isUserGuest.bind(this)}/>
+       <AddMessage messages={this.state.messages}  messagesRef={this.messagesRef} user={this.props.user} firebase={this.props.firebase} activeRoomID={this.props.activeRoomID} activeRoom={this.props.activeRoom} isUserGuest={this.isUserGuest.bind(this)}/>
       </div>
 
     )

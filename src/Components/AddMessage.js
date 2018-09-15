@@ -21,13 +21,8 @@ class AddMessage extends Component {
      sendAt: this.props.firebase.database.ServerValue.TIMESTAMP
    });
     this.setState ({newMessage: "" })
-    this.props.getActiveMessages();
   }
 
- componentDidMount() {
-   if(this.props.messages != [])
-     { this.props.getActiveMessages(); }
- }
 
   handleChange(e) {
       this.setState({ newMessage: e.target.value })
