@@ -8,10 +8,9 @@ class MessageList extends Component {
 
     this.state = {
       messages: [],
-      renderedMessages: []
     }
 
-    this.messagesRef = this.props.firebase.database().ref('messages');
+    this.messagesRef = this.props.firebase.database().ref('messages')
 
   }
 
@@ -25,9 +24,13 @@ class MessageList extends Component {
   }
 
 
-  messageDelete() {
-
+  messageDelete(messageKey) {
+    let messagesList = this.state.messages.slice();
+    const newState = messagesList.filter(message => message.key != messageKey)
+    this.messagesRef.child(messageKey).remove()
+    this.setState ({ messages: newState })
   }
+
 
   isUserGuest() {
     if (this.props.user == null) {
@@ -72,7 +75,7 @@ class MessageList extends Component {
   }
   return(validMessages.map((message) =>
   <tr key={ message.key }>
-  <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete()}> Delete </button>):" "}</td>
+  <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete(message.key)}> Delete </button>):" "}</td>
   <td> {message.Username} </td>
   <td> {message.content} </td>
   <td> {this.formatTime(message.sendAt)} </td>
