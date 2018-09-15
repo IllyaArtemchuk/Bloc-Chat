@@ -31,7 +31,7 @@ handleChange(e) {
       return (
         <form onSubmit={(e) => this.createRoom(e)}>
           <input type="text"  value={ this.state.newRoomName } onChange={ (e) => this.handleChange(e)}/>
-          <input type="Submit" value="Create Room"/>
+          <input type="Submit" readOnly value="Create Room"/>
         </form>
              )
 
