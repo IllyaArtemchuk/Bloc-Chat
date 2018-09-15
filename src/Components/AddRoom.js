@@ -15,7 +15,8 @@ createRoom(e) {
     e.preventDefault();
     if (!this.state.newRoomName) {return}
     this.props.roomsRef.push({
-       name: this.state.newRoomName
+       name: this.state.newRoomName,
+       createdBy: this.props.user.displayName
     });
     this.setState({ newRoomName: "" })
       }
@@ -24,15 +25,26 @@ handleChange(e) {
     this.setState({ newRoomName: e.target.value })
       }
 
-
+isUserGuest() {
+  console.log(this.props.user);
+  if (this.props.user == null) {
+    return <p> Sign In To Create Rooms! </p>
+  }
+  else {
+    return (
+    <form onSubmit={(e) => this.createRoom(e)}>
+      <input type="text"  value={ this.state.newRoomName } onChange={ (e) => this.handleChange(e)}/>
+      <input type="Submit" readOnly value="Create Room"/>
+    </form> )
+  }
+}
 
 
     render(){
       return (
-        <form onSubmit={(e) => this.createRoom(e)}>
-          <input type="text"  value={ this.state.newRoomName } onChange={ (e) => this.handleChange(e)}/>
-          <input type="Submit" readOnly value="Create Room"/>
-        </form>
+        <div>
+        {this.isUserGuest()}
+        </div>
              )
 
            }

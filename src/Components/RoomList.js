@@ -35,7 +35,7 @@ class RoomList extends Component {
       {this.state.rooms.map((room) =>
       <div key= {room.key} onClick={() => this.props.changeRoom(room)} > {room.name} </div>
     )}
-    <AddRoom roomsRef={this.roomsRef} rooms={this.state.rooms}/>
+    <AddRoom roomsRef={this.roomsRef} rooms={this.state.rooms} user={this.props.user}/>
       </div>
     )
   }
