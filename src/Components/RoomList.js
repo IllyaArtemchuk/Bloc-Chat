@@ -8,6 +8,7 @@ const RoomsPosition=  {
   color: "white"
 }
 
+
 class RoomList extends Component {
   constructor(props) {
     super(props);
@@ -28,13 +29,39 @@ class RoomList extends Component {
     });
   }
 
+  isUserGuest() {
+    if (this.props.user == null) {
+      return "Guest"
+    }
+    else {
+      return this.props.user.displayName
+    }
+  }
+
+  roomDelete(roomKey) {
+    let roomList = this.state.rooms.slice();
+    const newState = roomList.filter(room => room.key != roomKey)
+    this.roomsRef.child(roomKey).remove()
+    this.setState ({ rooms: newState })
+  }
+
 
   render() {
     return(
       <div style={RoomsPosition}>
+      <table>
+      <colgroup>
+      <col id="Delete" />
+      <col id="Room Name" />
+      </colgroup>
+      <tbody>
       {this.state.rooms.map((room) =>
-      <div key= {room.key} onClick={() => this.props.changeRoom(room)} > {room.name} </div>
-    )}
+        <tr key= {room.key}>
+      <td > {this.isUserGuest() == room.createdBy?(<button onClick={() => this.roomDelete(room.key)}> Delete </button>):" "} </td>
+      <td  onClick={() => this.props.changeRoom(room)} > {room.name} </td>
+    </tr>)}
+    </tbody>
+    </table>
     <AddRoom roomsRef={this.roomsRef} rooms={this.state.rooms} user={this.props.user}/>
       </div>
     )

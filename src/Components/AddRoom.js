@@ -26,7 +26,6 @@ handleChange(e) {
       }
 
 isUserGuest() {
-  console.log(this.props.user);
   if (this.props.user == null) {
     return <p> Sign In To Create Rooms! </p>
   }
