@@ -8,6 +8,7 @@ class MessageList extends Component {
 
     this.state = {
       messages: [],
+      messageBeingEdited: []
     }
 
     this.messagesRef = this.props.firebase.database().ref('messages')
@@ -66,6 +67,62 @@ class MessageList extends Component {
         return (month+"/"+day+" "+hours+":"+minutes+" "+ampm)
       }
 
+  changeMessageContent(e) {
+    e.preventDefault();
+    if (!this.state.newMessage) {return}
+  }
+
+
+
+  messageEdit(messageKey) {
+    let messagesList = this.state.messages.slice();
+    const EditedMessage = messagesList.filter(message => message.key == messageKey)
+    this.setState ({ messageBeingEdited: EditedMessage})
+  }
+
+
+
+  renderEditInput(messageKey, messageContent) {
+    console.log(messageKey)
+     return(
+       <form onSubmit={(e) => this.changeMessageContent(e)}>
+       <input type="text" value={messageContent} onChange={(e) => this.handleChange(e, messageKey)}/>
+       <input type="submit" value="Confirm" />
+       <button onClick={this.cancelRender.bind(this)} >Cancel </button>
+       </form>
+     )
+  }
+
+
+
+  handleChange(e, messageKey) {
+    e.preventDefault();
+    console.log(messageKey)
+    var newState = this.state.messages.slice();
+    for (let i=0;i < newState.length;i++) {
+      if (newState[i].key == messageKey) {
+        newState[i].content = e.target.value
+        console.log(newState[i].content)
+        console.log(e.target.value)
+      }
+    }
+    console.log(newState)
+    this.setState({ messages: newState })
+  }
+
+  cancelRender(event) {
+    event.preventDefault();
+    this.setState({ messageBeingEdited: [] })
+  }
+
+  isMessageBeingEdited() {
+    if (this.state.messageBeingEdited[0] == undefined){
+      return ("nothing")
+    }
+    else { return this.state.messageBeingEdited[0].key}
+  }
+
+
   renderRoomMessages() {
   if(this.state.messages[0] === undefined) {return}
   let validMessages = [];
@@ -76,8 +133,9 @@ class MessageList extends Component {
   return(validMessages.map((message) =>
   <tr key={ message.key }>
   <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete(message.key)}> Delete </button>):" "}</td>
+  <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageEdit(message.key)}> Edit </button>):" "}</td>
   <td> {message.Username} </td>
-  <td> {message.content} </td>
+  <td> {message.key == this.isMessageBeingEdited()?(this.renderEditInput(message.key, message.content)):message.content} </td>
   <td> {this.formatTime(message.sendAt)} </td>
   </tr>
 ))
@@ -91,6 +149,7 @@ class MessageList extends Component {
        <table>
        <colgroup>
        <col id="Delete Button" />
+       <col id="Edit Button" />
        <col id="Username" />
        <col id="ChatMessage" />
        <col id="MessageSentAt" />
