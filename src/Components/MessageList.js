@@ -8,7 +8,8 @@ class MessageList extends Component {
 
     this.state = {
       messages: [],
-      messageBeingEdited: []
+      messageBeingEdited: [],
+      editText: ""
     }
 
     this.messagesRef = this.props.firebase.database().ref('messages')
@@ -67,26 +68,37 @@ class MessageList extends Component {
         return (month+"/"+day+" "+hours+":"+minutes+" "+ampm)
       }
 
-  changeMessageContent(e) {
+  changeMessageContent(e, messageKey) {
     e.preventDefault();
-    if (!this.state.newMessage) {return}
+    if (this.state.editText == "") {return}
+    let messagesList = this.state.messages.slice();
+    for (let i = 0;i < messagesList.length ;i++) {
+      if(messagesList[i].key == messageKey) {
+        console.log(messagesList[i].content)
+        messagesList[i].content = this.state.editText;
+        console.log(messagesList[i].content)
+      }
+    }
+    this.messagesRef.child(messageKey).update({ content: this.state.editText})
+    this.setState ({ messages: messagesList,
+    messageBeingEdited: [] })
   }
 
 
 
-  messageEdit(messageKey) {
+  messageEdit(messageKey, messageContent) {
     let messagesList = this.state.messages.slice();
     const EditedMessage = messagesList.filter(message => message.key == messageKey)
-    this.setState ({ messageBeingEdited: EditedMessage})
+    this.setState ({ messageBeingEdited: EditedMessage,
+                     editText: messageContent})
   }
 
 
 
   renderEditInput(messageKey, messageContent) {
-    console.log(messageKey)
      return(
-       <form onSubmit={(e) => this.changeMessageContent(e)}>
-       <input type="text" value={messageContent} onChange={(e) => this.handleChange(e, messageKey)}/>
+       <form onSubmit={(e) => this.changeMessageContent(e, messageKey)}>
+       <input type="text" value={this.state.editText} onChange={(e) => this.handleChange(e, messageKey)}/>
        <input type="submit" value="Confirm" />
        <button onClick={this.cancelRender.bind(this)} >Cancel </button>
        </form>
@@ -97,17 +109,7 @@ class MessageList extends Component {
 
   handleChange(e, messageKey) {
     e.preventDefault();
-    console.log(messageKey)
-    var newState = this.state.messages.slice();
-    for (let i=0;i < newState.length;i++) {
-      if (newState[i].key == messageKey) {
-        newState[i].content = e.target.value
-        console.log(newState[i].content)
-        console.log(e.target.value)
-      }
-    }
-    console.log(newState)
-    this.setState({ messages: newState })
+    this.setState({ editText: e.target.value })
   }
 
   cancelRender(event) {
@@ -133,7 +135,7 @@ class MessageList extends Component {
   return(validMessages.map((message) =>
   <tr key={ message.key }>
   <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete(message.key)}> Delete </button>):" "}</td>
-  <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageEdit(message.key)}> Edit </button>):" "}</td>
+  <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageEdit(message.key, message.content)}> Edit </button>):" "}</td>
   <td> {message.Username} </td>
   <td> {message.key == this.isMessageBeingEdited()?(this.renderEditInput(message.key, message.content)):message.content} </td>
   <td> {this.formatTime(message.sendAt)} </td>
