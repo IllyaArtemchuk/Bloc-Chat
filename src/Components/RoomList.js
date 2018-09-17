@@ -15,6 +15,8 @@ class RoomList extends Component {
 
     this.state = {
       rooms: [],
+      roomBeingEdited: [],
+      editText: ""
     };
 
     this.roomsRef = this.props.firebase.database().ref('rooms');
@@ -45,20 +47,71 @@ class RoomList extends Component {
     this.setState ({ rooms: newState })
   }
 
+  roomEdit(roomKey, roomName) {
+    let roomsList = this.state.rooms.slice();
+    const EditedRooms = roomsList.filter(room => room.key == roomKey)
+    this.setState ({ roomBeingEdited: EditedRooms,
+                     editText: roomName})
+  }
+
+  renderEditInput(roomKey, roomName) {
+     return(
+       <form onSubmit={(e) => this.changeRoomName(e, roomKey)}>
+       <input type="text" value={this.state.editText} onChange={(e) => this.handleChange(e, roomKey)}/>
+       <input type="submit" value="Confirm" />
+       <button onClick={this.cancelRender.bind(this)} >Cancel </button>
+       </form>
+     )
+  }
+
+  isRoomBeingEdited() {
+    if (this.state.roomBeingEdited[0] == undefined){
+      return ("nothing")
+    }
+    else { return this.state.roomBeingEdited[0].key}
+  }
+
+  handleChange(e, roomKey)  {
+    e.preventDefault();
+    this.setState({ editText: e.target.value })
+  }
+
+  cancelRender(event) {
+    event.preventDefault();
+    this.setState({ roomBeingEdited: [] })
+  }
+
+  changeRoomName(e, roomKey) {
+    e.preventDefault();
+    if (this.state.editText == "") {return}
+    let roomsList = this.state.rooms.slice();
+    for (let i = 0;i < roomsList.length ;i++) {
+      if(roomsList[i].key == roomKey) {
+        roomsList[i].name = this.state.editText;
+      }
+    }
+    this.roomsRef.child(roomKey).update({ name: this.state.editText})
+    this.setState ({ rooms: roomsList,
+    roomBeingEdited: [] })
+  }
+
+
 
   render() {
     return(
       <div style={RoomsPosition}>
       <table>
       <colgroup>
-      <col id="Delete" />
+      <col id="Room Delete" />
+      <col id="Room Edit" />
       <col id="Room Name" />
       </colgroup>
       <tbody>
       {this.state.rooms.map((room) =>
         <tr key= {room.key}>
       <td > {this.isUserGuest() == room.createdBy?(<button onClick={() => this.roomDelete(room.key)}> Delete </button>):" "} </td>
-      <td  onClick={() => this.props.changeRoom(room)} > {room.name} </td>
+      <td > {this.isUserGuest() == room.createdBy?(<button onClick={() => this.roomEdit(room.key, room.name)}> Edit </button>):" "} </td>
+      <td  onClick={() => this.props.changeRoom(room)} > {room.key == this.isRoomBeingEdited()?(this.renderEditInput(room.key, room.name)):room.name} </td>
     </tr>)}
     </tbody>
     </table>
