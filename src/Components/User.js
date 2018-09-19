@@ -15,11 +15,13 @@ class User extends Component {
 
 handleSignOut() {
   this.props.firebase.auth().signOut();
+  this.props.signOut();
 }
 
 componentDidMount() {
   this.props.firebase.auth().onAuthStateChanged( user => {
   this.props.setUser(user);
+  console.log(this.props.user)
 });
 }
 

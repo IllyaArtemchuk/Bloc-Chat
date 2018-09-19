@@ -16,7 +16,8 @@ createRoom(e) {
     if (!this.state.newRoomName) {return}
     this.props.roomsRef.push({
        name: this.state.newRoomName,
-       createdBy: this.props.user.displayName
+       createdBy: this.props.user.displayName,
+       access: "Public"
     });
     this.setState({ newRoomName: "" })
       }

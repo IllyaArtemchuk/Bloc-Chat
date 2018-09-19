@@ -29,18 +29,38 @@ class App extends Component {
 
     this.state = {
       activeRoom: "",
-      user: ""
+      user: "",
+      isAdmin: false
     };
+
+    this.adminCredentials = ["Ilya Artemchuk", "ilyalinkis@gmail.com"]
   }
 
   changeRoom(room) {
     this.setState({ activeRoom: room});
   }
 
-  setUser(user) {
-    console.log(user)
-    this.setState({ user: user});
+  isUserAdmin(user) {
+    if (this.adminCredentials.includes(this.state.user.displayName, this.state.user.email)) {
+      return "User is Admin"
+    }
+    else {return "User is Not"}
   }
+
+  setUser(user) {
+    this.setState({ user: user});
+    if (this.isUserAdmin(user) == "User is Admin") {
+      this.setState({ isAdmin: true })
+    } }
+
+
+
+signOut =()=> {
+     this.setState({ isAdmin: false })
+   }
+
+
+
 
 
   render() {
@@ -48,10 +68,10 @@ class App extends Component {
       <div className="App">
       <h1 style={Header}> Bloc Chat </h1>
       <RoomList
-         firebase={firebase} changeRoom={this.changeRoom.bind(this)} user={ this.state.user }/>
+         firebase={firebase} changeRoom={this.changeRoom.bind(this)} user={ this.state.user } isAdmin={ this.state.isAdmin }/>
 
-      <MessageList activeRoomID={this.state.activeRoom.key} activeRoom={this.state.activeRoom} firebase={firebase} user={ this.state.user }/>
-      <User firebase={firebase} setUser={this.setUser.bind(this)} user={this.state.user}/>
+      <MessageList activeRoomID={this.state.activeRoom.key} activeRoom={this.state.activeRoom} firebase={firebase} user={ this.state.user } isAdmin={this.state.isAdmin}/>
+      <User firebase={firebase} setUser={this.setUser.bind(this)} user={this.state.user} signOut={this.signOut}/>
       </div>
     );
   }

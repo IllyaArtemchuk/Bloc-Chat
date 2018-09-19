@@ -134,7 +134,7 @@ class MessageList extends Component {
   }
   return(validMessages.map((message) =>
   <tr key={ message.key }>
-  <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete(message.key)}> Delete </button>):" "}</td>
+  <td> {this.props.isAdmin ==true || this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete(message.key)}> Delete </button>):" "}</td>
   <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageEdit(message.key, message.content)}> Edit </button>):" "}</td>
   <td> {message.Username} </td>
   <td> {message.key == this.isMessageBeingEdited()?(this.renderEditInput(message.key, message.content)):message.content} </td>

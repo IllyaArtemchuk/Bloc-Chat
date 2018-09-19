@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AddRoom from "./AddRoom"
+import AddPrivateRoom from "./AddPrivateRoom"
 
 const RoomsPosition=  {
   float: "left",
@@ -16,7 +17,8 @@ class RoomList extends Component {
     this.state = {
       rooms: [],
       roomBeingEdited: [],
-      editText: ""
+      editText: "",
+      roomSettings: false
     };
 
     this.roomsRef = this.props.firebase.database().ref('rooms');
@@ -95,6 +97,15 @@ class RoomList extends Component {
     roomBeingEdited: [] })
   }
 
+  handleRoomSettings(e) {
+    if(this.state.roomSettings == true) {
+      this.setState({ roomSettings: false })
+    }
+    else if(this.state.roomSettings == false) {
+      this.setState({ roomSettings: true })
+    }
+  }
+
 
 
   render() {
@@ -109,13 +120,15 @@ class RoomList extends Component {
       <tbody>
       {this.state.rooms.map((room) =>
         <tr key= {room.key}>
-      <td > {this.isUserGuest() == room.createdBy?(<button onClick={() => this.roomDelete(room.key)}> Delete </button>):" "} </td>
-      <td > {this.isUserGuest() == room.createdBy?(<button onClick={() => this.roomEdit(room.key, room.name)}> Edit </button>):" "} </td>
-      <td  onClick={() => this.props.changeRoom(room)} > {room.key == this.isRoomBeingEdited()?(this.renderEditInput(room.key, room.name)):room.name} </td>
+      <td > {this.state.roomSettings == true && (this.props.isAdmin == true || this.isUserGuest() == room.createdBy)?(<button onClick={() => this.roomDelete(room.key)}> Delete </button>):""} </td>
+      <td > {this.state.roomSettings == true && (this.props.isAdmin == true || this.isUserGuest() == room.createdBy)?(<button onClick={() => this.roomEdit(room.key, room.name)}> Edit </button>):""} </td>
+      {this.props.isAdmin === true || room.access === "Public" || room.authorizedUsers.includes(this.isUserGuest()) === true?(<td  onClick={() => this.props.changeRoom(room)} > {room.key == this.isRoomBeingEdited()?(this.renderEditInput(room.key, room.name)):room.name}</td>):""}
     </tr>)}
     </tbody>
     </table>
     <AddRoom roomsRef={this.roomsRef} rooms={this.state.rooms} user={this.props.user}/>
+    <button onClick={(e)=> this.handleRoomSettings(e)}>{this.state.roomSettings == true?<div>Return</div>:<div>Room Settings</div>}</button>
+    <AddPrivateRoom roomsRef={this.roomsRef} rooms={this.state.rooms} user={this.props.user} isAdmin={this.props.isAdmin}/>
       </div>
     )
   }
