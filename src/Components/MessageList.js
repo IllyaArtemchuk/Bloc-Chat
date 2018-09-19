@@ -9,7 +9,8 @@ class MessageList extends Component {
     this.state = {
       messages: [],
       messageBeingEdited: [],
-      editText: ""
+      editText: "",
+      settingsEnabledOn: []
     }
 
     this.messagesRef = this.props.firebase.database().ref('messages')
