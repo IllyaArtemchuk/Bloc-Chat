@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import AddMessage from "./AddMessage";
 
+const messagesList = {
+
+}
+
 
 class MessageList extends Component {
   constructor(props) {
@@ -10,7 +14,7 @@ class MessageList extends Component {
       messages: [],
       messageBeingEdited: [],
       editText: "",
-      settingsEnabledOn: []
+      settingsEnabled: []
     }
 
     this.messagesRef = this.props.firebase.database().ref('messages')
@@ -107,6 +111,15 @@ class MessageList extends Component {
   }
 
 
+  handleHover(e, messageKey) {
+    e.preventDefault();
+    this.setState({ messageBeingHovered: messageKey})
+  }
+
+  handleLeave(e) {
+    e.preventDefault();
+    this.setState({ messageBeingHovered: [] })
+  }
 
   handleChange(e, messageKey) {
     e.preventDefault();
@@ -125,6 +138,27 @@ class MessageList extends Component {
     else { return this.state.messageBeingEdited[0].key}
   }
 
+  enableSettings(messageKey) {
+    this.setState ({ settingsEnabled: messageKey})
+  }
+
+  disableSettings(messageKey) {
+    this.setState ({ settingsEnabled: []})
+  }
+
+  renderSettingsButton(messageKey) {
+    if(this.state.settingsEnabled == messageKey) {
+      return (
+        <button onClick={(()=> this.disableSettings(messageKey))}>Return</button>
+      )
+    }
+    else if(this.state.settingsEnabled !== messageKey) {
+      return(
+        <button onClick={(()=> this.enableSettings(messageKey))}>Settings</button>
+      )
+    }
+  }
+
 
   renderRoomMessages() {
   if(this.state.messages[0] === undefined) {return}
@@ -134,9 +168,10 @@ class MessageList extends Component {
       validMessages.push(this.state.messages[i])}
   }
   return(validMessages.map((message) =>
-  <tr key={ message.key }>
-  <td> {this.props.isAdmin ==true || this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete(message.key)}> Delete </button>):" "}</td>
-  <td> {this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageEdit(message.key, message.content)}> Edit </button>):" "}</td>
+  <tr onMouseEnter={(e) => this.handleHover(e, message.key)} onMouseLeave={(e)=> this.handleLeave(e)} key={ message.key }>
+  <td> {this.state.settingsEnabled === message.key && (this.props.isAdmin === true || this.isUserGuest() == message.Username)&& this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete(message.key)}> Delete </button>):<div></div>}</td>
+  <td> {this.state.settingsEnabled === message.key && this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageEdit(message.key, message.content)}> Edit </button>):<div></div>}</td>
+  <td> {this.state.messageBeingHovered === message.key?this.renderSettingsButton(message.key):<div></div>} </td>
   <td> {message.Username} </td>
   <td> {message.key == this.isMessageBeingEdited()?(this.renderEditInput(message.key, message.content)):message.content} </td>
   <td> {this.formatTime(message.sendAt)} </td>
@@ -147,9 +182,9 @@ class MessageList extends Component {
 
   render() {
     return (
-      <div>
+      <div style={messagesList}>
        <h2> {this.props.activeRoom != ""?this.props.activeRoom.name: "Select a Room"} </h2>
-       <table>
+       <table align="center">
        <colgroup>
        <col id="Delete Button" />
        <col id="Edit Button" />

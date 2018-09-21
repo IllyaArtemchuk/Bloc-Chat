@@ -37,21 +37,22 @@ handleUserChange(e) {
 }
 
 addUser(e) {
+  e.preventDefault();
   let newState = this.state.authorizedUsers.slice();
   newState.push(this.state.pendingAuthorizedUser)
-  this.setState({ authorizedUsers: newState })
+  this.setState({ authorizedUsers: newState,
+  pendingAuthorizedUser: "" })
 }
 
 renderUserSelection() {
   if(this.state.authorizedUsers[0] == null) {
   let newState = []
   newState.push(this.props.user.displayName)
-  console.log(newState)
   this.setState({ authorizedUsers: newState }) }
   return(
     <div>
        <form onSubmit={(e) => this.addUser(e)}>
-          <input type="text" onChange= { (e) => this.handleUserChange(e) } />
+          <input type="text" onChange= { (e) => this.handleUserChange(e) } value={this.state.pendingAuthorizedUser}/>
           <input type="Submit" value="Add" readOnly />
        </form>
        <table>
@@ -83,10 +84,10 @@ isUserAdmin() {
     <form onSubmit={(e) => this.createRoom(e)}>
       <input type="text"  value={ this.state.newRoomName } onChange={ (e) => this.handleChange(e)}/>
       <input type="Submit" readOnly value="Create Private Room"/>
-      <div>
-      {this.state.areUsersBeingInputted == true?(this.renderUserSelection()):<button onClick={()=> this.handleUserSelection()}> Change Allowed Users </button>}
-      </div>
     </form>
+    <div>
+    {this.state.areUsersBeingInputted == true?(this.renderUserSelection()):<button onClick={()=> this.handleUserSelection()}> Change Allowed Users </button>}
+    </div>
   </div> )
   }
 }
