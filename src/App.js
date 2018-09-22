@@ -8,9 +8,7 @@ import User from "./Components/User";
 
 const Header = {
   backgroundColor:"rgb(167, 171, 178)",
-  height:"10vw",
-  marginBottom:"-.1vw",
-  marginTtop:"-2vw"
+  fontSize: "1000px"
 }
   // Initialize Firebase
   var config = {
@@ -66,12 +64,23 @@ signOut =()=> {
   render() {
     return (
       <div className="App">
-      <h1 style={Header}> Bloc Chat </h1>
-      <RoomList
+      <div className="jumbotron text-center" style={Header}>
+      <h1 > Bloc Chat </h1>
+      <h3> Chat with your friends! </h3>
+      </div>
+      <div className="container-fluid">
+      <div className="row">
+      <RoomList className="col-sm-4"
          firebase={firebase} changeRoom={this.changeRoom.bind(this)} user={ this.state.user } isAdmin={ this.state.isAdmin }/>
 
-      <MessageList activeRoomID={this.state.activeRoom.key} activeRoom={this.state.activeRoom} firebase={firebase} user={ this.state.user } isAdmin={this.state.isAdmin}/>
+      <MessageList className="col-sm-8" activeRoomID={this.state.activeRoom.key} activeRoom={this.state.activeRoom} firebase={firebase} user={ this.state.user } isAdmin={this.state.isAdmin}/>
+      </div>
+      <div className="row" >
+      <div className="col-sm-5">
+      </div>
       <User firebase={firebase} setUser={this.setUser.bind(this)} user={this.state.user} signOut={this.signOut}/>
+      </div>
+      </div>
       </div>
     );
   }

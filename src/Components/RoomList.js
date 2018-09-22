@@ -5,10 +5,13 @@ import AddPrivateRoom from "./AddPrivateRoom"
 const RoomsPosition=  {
   float: "left",
   backgroundColor: "rgb(81, 98, 127)",
-  height: "100vw",
+  height: "700px",
   color: "white"
 }
 
+const tableBody= {
+  textAlign: "left",
+}
 
 class RoomList extends Component {
   constructor(props) {
@@ -117,7 +120,7 @@ class RoomList extends Component {
       <col id="Room Edit" />
       <col id="Room Name" />
       </colgroup>
-      <tbody>
+      <tbody style={tableBody}>
       {this.state.rooms.map((room) =>
         <tr key= {room.key}>
       <td > {this.state.roomSettings == true && (this.props.isAdmin == true || this.isUserGuest() == room.createdBy)?(<button onClick={() => this.roomDelete(room.key)}> Delete </button>):""} </td>

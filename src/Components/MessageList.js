@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import AddMessage from "./AddMessage";
+import './MessageList.css';
 
 const messagesList = {
 
+}
+
+const tableStyle = {
+  width: "1300px",
+  height: "200px"
 }
 
 
@@ -169,11 +175,11 @@ class MessageList extends Component {
   }
   return(validMessages.map((message) =>
   <tr onMouseEnter={(e) => this.handleHover(e, message.key)} onMouseLeave={(e)=> this.handleLeave(e)} key={ message.key }>
-  <td> {this.state.settingsEnabled === message.key && (this.props.isAdmin === true || this.isUserGuest() == message.Username)&& this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete(message.key)}> Delete </button>):<div></div>}</td>
-  <td> {this.state.settingsEnabled === message.key && this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageEdit(message.key, message.content)}> Edit </button>):<div></div>}</td>
-  <td> {this.state.messageBeingHovered === message.key?this.renderSettingsButton(message.key):<div></div>} </td>
-  <td> {message.Username} </td>
-  <td> {message.key == this.isMessageBeingEdited()?(this.renderEditInput(message.key, message.content)):message.content} </td>
+  <td className="dynamicButton"> {this.state.settingsEnabled === message.key && (this.props.isAdmin === true || this.isUserGuest() == message.Username)&& this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete(message.key)}> Delete </button>):<div></div>}</td>
+  <td  className="dynamicButtonSmall"> {this.state.settingsEnabled === message.key && this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageEdit(message.key, message.content)}> Edit </button>):<div></div>}</td>
+  <td  className="dynamicButton"> {this.state.messageBeingHovered === message.key?this.renderSettingsButton(message.key):<div></div>} </td>
+  <td className="text-nowrap"> {message.Username} </td>
+  <td className="messageContent"> {message.key == this.isMessageBeingEdited()?(this.renderEditInput(message.key, message.content)):message.content} </td>
   <td> {this.formatTime(message.sendAt)} </td>
   </tr>
 ))
@@ -184,7 +190,8 @@ class MessageList extends Component {
     return (
       <div style={messagesList}>
        <h2> {this.props.activeRoom != ""?this.props.activeRoom.name: "Select a Room"} </h2>
-       <table align="center">
+       <div className="table-wrapper-scroll-y">
+       <table align="center" className="table table-striped" style={tableStyle}>
        <colgroup>
        <col id="Delete Button" />
        <col id="Edit Button" />
@@ -196,6 +203,7 @@ class MessageList extends Component {
        {this.renderRoomMessages()}
        </tbody>
        </table>
+       </div>
        <AddMessage messages={this.state.messages}  messagesRef={this.messagesRef} user={this.props.user} firebase={this.props.firebase} activeRoomID={this.props.activeRoomID} activeRoom={this.props.activeRoom} isUserGuest={this.isUserGuest.bind(this)}/>
       </div>
 

@@ -1,0 +1,19 @@
+
+.table-wrapper-scroll-y {
+  display: block;
+  max-height: 650px;
+  overflow-y: auto;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.messageContent {
+  text-align: left
+}
+
+.dynamicButton {
+  width: 100px;
+}
+
+.dynamicButtonSmall {
+  width: 78px
+}
