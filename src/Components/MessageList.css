@@ -1,4 +1,6 @@
 
+
+
 .table-wrapper-scroll-y {
   display: block;
   max-height: 650px;
@@ -12,8 +14,51 @@
 
 .dynamicButton {
   width: 100px;
+  height: 25px;
 }
 
 .dynamicButtonSmall {
-  width: 78px
+  width: 78px;
+  height: 25px;
+}
+
+.dynamicButtonSmall2 {
+  width: 50px;
+  height: 25px;
+  border: none;
+  background-color: transparent;
+  color: rgb(89, 88, 89);
+}
+
+.dynamicButton2 {
+  width: 60px;
+  height: 25px;
+  background-color: Transparent;
+  color: rgb(206, 14, 14);
+  border: none;
+}
+
+
+.userName {
+  white-space: nowrap;
+  font-weight: bold;
+  height: 55px
+}
+
+.settingsButton {
+  border: none;
+  color: grey;
+  background-color: Transparent;
+  height: 25px
+}
+
+.timeDisplay {
+  white-space: nowrap;
+}
+
+.roomNameTitle {
+  background-color: rgb(140, 167, 209);
+  border: solid;
+  border-color: rgb(167, 171, 178);
+
 }

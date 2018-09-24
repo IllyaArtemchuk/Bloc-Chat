@@ -3,7 +3,10 @@ import AddMessage from "./AddMessage";
 import './MessageList.css';
 
 const messagesList = {
-
+   borderLeft: "solid",
+   borderRight: "solid",
+    borderBottom: "solid",
+   borderColor: "rgb(167, 171, 178)",
 }
 
 const tableStyle = {
@@ -109,7 +112,7 @@ class MessageList extends Component {
   renderEditInput(messageKey, messageContent) {
      return(
        <form onSubmit={(e) => this.changeMessageContent(e, messageKey)}>
-       <input type="text" value={this.state.editText} onChange={(e) => this.handleChange(e, messageKey)}/>
+       <input type="text" value={this.state.editText} onChange={(e) => this.handleChange(e, messageKey)} className="form-control"/>
        <input type="submit" value="Confirm" />
        <button onClick={this.cancelRender.bind(this)} >Cancel </button>
        </form>
@@ -155,12 +158,12 @@ class MessageList extends Component {
   renderSettingsButton(messageKey) {
     if(this.state.settingsEnabled == messageKey) {
       return (
-        <button onClick={(()=> this.disableSettings(messageKey))}>Return</button>
+        <button className="settingsButton" onClick={(()=> this.disableSettings(messageKey))}>Return</button>
       )
     }
     else if(this.state.settingsEnabled !== messageKey) {
       return(
-        <button onClick={(()=> this.enableSettings(messageKey))}>Settings</button>
+        <button className="settingsButton" onClick={(()=> this.enableSettings(messageKey))}>Settings</button>
       )
     }
   }
@@ -175,12 +178,12 @@ class MessageList extends Component {
   }
   return(validMessages.map((message) =>
   <tr onMouseEnter={(e) => this.handleHover(e, message.key)} onMouseLeave={(e)=> this.handleLeave(e)} key={ message.key }>
-  <td className="dynamicButton"> {this.state.settingsEnabled === message.key && (this.props.isAdmin === true || this.isUserGuest() == message.Username)&& this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageDelete(message.key)}> Delete </button>):<div></div>}</td>
-  <td  className="dynamicButtonSmall"> {this.state.settingsEnabled === message.key && this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button onClick={() => this.messageEdit(message.key, message.content)}> Edit </button>):<div></div>}</td>
+  <td className="dynamicButton"> {this.state.settingsEnabled === message.key && (this.props.isAdmin === true || this.isUserGuest() == message.Username)&& this.isUserGuest() !== "Guest" ?(<button className="dynamicButton2" onClick={() => this.messageDelete(message.key)}> Delete </button>):<div></div>}</td>
+  <td  className="dynamicButtonSmall"> {this.state.settingsEnabled === message.key && this.isUserGuest() == message.Username && this.isUserGuest() !== "Guest" ?(<button className="dynamicButtonSmall2" onClick={() => this.messageEdit(message.key, message.content)}> Edit </button>):<div></div>}</td>
   <td  className="dynamicButton"> {this.state.messageBeingHovered === message.key?this.renderSettingsButton(message.key):<div></div>} </td>
-  <td className="text-nowrap"> {message.Username} </td>
+  <td className="userName"> {message.Username} </td>
   <td className="messageContent"> {message.key == this.isMessageBeingEdited()?(this.renderEditInput(message.key, message.content)):message.content} </td>
-  <td> {this.formatTime(message.sendAt)} </td>
+  <td className="timeDisplay"> {this.formatTime(message.sendAt)} </td>
   </tr>
 ))
   }
@@ -189,7 +192,7 @@ class MessageList extends Component {
   render() {
     return (
       <div style={messagesList}>
-       <h2> {this.props.activeRoom != ""?this.props.activeRoom.name: "Select a Room"} </h2>
+       <h2 className="roomNameTitle"> {this.props.activeRoom != ""?this.props.activeRoom.name: "Select a Room"} </h2>
        <div className="table-wrapper-scroll-y">
        <table align="center" className="table table-striped" style={tableStyle}>
        <colgroup>

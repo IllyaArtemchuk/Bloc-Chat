@@ -7,8 +7,9 @@ import User from "./Components/User";
 
 
 const Header = {
-  backgroundColor:"rgb(167, 171, 178)",
-  fontSize: "1000px"
+  backgroundColor:"rgb(81, 98, 127)",
+  fontSize: "1000px",
+  color: "white"
 }
   // Initialize Firebase
   var config = {
@@ -70,15 +71,15 @@ signOut =()=> {
       </div>
       <div className="container-fluid">
       <div className="row">
-      <RoomList className="col-sm-4"
+      <RoomList className="col-sm-5"
          firebase={firebase} changeRoom={this.changeRoom.bind(this)} user={ this.state.user } isAdmin={ this.state.isAdmin }/>
 
-      <MessageList className="col-sm-8" activeRoomID={this.state.activeRoom.key} activeRoom={this.state.activeRoom} firebase={firebase} user={ this.state.user } isAdmin={this.state.isAdmin}/>
+      <MessageList className="col-sm-7" activeRoomID={this.state.activeRoom.key} activeRoom={this.state.activeRoom} firebase={firebase} user={ this.state.user } isAdmin={this.state.isAdmin}/>
       </div>
       <div className="row" >
       <div className="col-sm-5">
-      </div>
-      <User firebase={firebase} setUser={this.setUser.bind(this)} user={this.state.user} signOut={this.signOut}/>
+      </div >
+      <User className="col-sm-7" firebase={firebase} setUser={this.setUser.bind(this)} user={this.state.user} signOut={this.signOut}/>
       </div>
       </div>
       </div>

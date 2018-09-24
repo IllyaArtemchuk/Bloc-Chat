@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 
+const button = {
+  width: "90px"
+}
+
+const userGreet = {
+  fontSize: "30px",
+  fontWeight: "bold",
+  color: "rgb(73, 73, 73)"
+}
+
 class User extends Component {
   constructor(props) {
     super(props);
 
   }
-
 
  handleSignIn() {
   const provider = new this.props.firebase.auth.GoogleAuthProvider();
@@ -27,18 +36,18 @@ componentDidMount() {
 
 userExists() {
   if (this.props.user !== null) {
-    return <p> Greetings, {this.props.user.displayName} </p>
+    return <p style={userGreet}> Greetings, {this.props.user.displayName} </p>
   }
   else {
-    return <p> Greetings, Guest </p>
+    return <p style={userGreet}> Greetings, Guest </p>
        }
      }
 
   render() {
     return (
     <div>
-     <button onClick={() => this.handleSignIn()}>Sign In</button>
-     <button onClick={()=> this.handleSignOut()}>Sign Out</button>
+     <button style={button} className="btn btn-light" onClick={() => this.handleSignIn()}>Sign In</button>
+     <button style={button} className="btn btn-dark" onClick={()=> this.handleSignOut()}>Sign Out</button>
      {this.userExists()}
     </div>
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import './AddRoom.css';
 
 class AddRoom extends Component {
   constructor(props) {
@@ -32,9 +32,12 @@ isUserGuest() {
   }
   else {
     return (
-    <form onSubmit={(e) => this.createRoom(e)}>
-      <input type="text"  value={ this.state.newRoomName } onChange={ (e) => this.handleChange(e)}/>
-      <input type="Submit" readOnly value="Create Room"/>
+    <form onSubmit={(e) => this.createRoom(e)} className="form-inline">
+    <div className="form-group" >
+    <label for="text">Create New Room:</label>
+      <input type="text"  value={ this.state.newRoomName } onChange={ (e) => this.handleChange(e)} className="form-control"/>
+      <input type="Submit" readOnly value="Submit" className="btn btn-light"/>
+      </div>
     </form> )
   }
 }

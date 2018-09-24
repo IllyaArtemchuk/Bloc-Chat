@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import AddRoom from "./AddRoom"
 import AddPrivateRoom from "./AddPrivateRoom"
+import './RoomList.css';
 
 const RoomsPosition=  {
   float: "left",
   backgroundColor: "rgb(81, 98, 127)",
-  height: "700px",
-  color: "white"
+  height: "745px",
+  color: "white",
+  marginRight: "90px",
+  textAlign: "left",
+  border: "solid",
+  borderColor: "rgb(73, 73, 73)"
 }
 
 const tableBody= {
@@ -114,7 +119,9 @@ class RoomList extends Component {
   render() {
     return(
       <div style={RoomsPosition}>
-      <table>
+      <button id="roomSettingsButton" className="btn btn-light" onClick={(e)=> this.handleRoomSettings(e)}>{this.state.roomSettings == true?<div>Return</div>:<div>Room Settings</div>}</button>
+       <div className="table-wrapper-scroll-y">
+      <table className="table">
       <colgroup>
       <col id="Room Delete" />
       <col id="Room Edit" />
@@ -123,14 +130,16 @@ class RoomList extends Component {
       <tbody style={tableBody}>
       {this.state.rooms.map((room) =>
         <tr key= {room.key}>
-      <td > {this.state.roomSettings == true && (this.props.isAdmin == true || this.isUserGuest() == room.createdBy)?(<button onClick={() => this.roomDelete(room.key)}> Delete </button>):""} </td>
-      <td > {this.state.roomSettings == true && (this.props.isAdmin == true || this.isUserGuest() == room.createdBy)?(<button onClick={() => this.roomEdit(room.key, room.name)}> Edit </button>):""} </td>
-      {this.props.isAdmin === true || room.access === "Public" || room.authorizedUsers.includes(this.isUserGuest()) === true?(<td  onClick={() => this.props.changeRoom(room)} > {room.key == this.isRoomBeingEdited()?(this.renderEditInput(room.key, room.name)):room.name}</td>):""}
+      <td className="dynamicButton" > {this.state.roomSettings == true && (this.props.isAdmin == true || this.isUserGuest() == room.createdBy)?(<button className="dynamicButton1" onClick={() => this.roomDelete(room.key)}> Delete </button>):""} </td>
+      <td className="dynamicButtonSmall"> {this.state.roomSettings == true && (this.props.isAdmin == true || this.isUserGuest() == room.createdBy)?(<button className="dynamicButtonSmall1" onClick={() => this.roomEdit(room.key, room.name)}> Edit </button>):""}</td>
+      {this.props.isAdmin === true || room.access === "Public" || room.authorizedUsers.includes(this.isUserGuest()) === true?(<td className="roomName" onClick={() => this.props.changeRoom(room)} > {room.key == this.isRoomBeingEdited()?(this.renderEditInput(room.key, room.name)):room.name}</td>):""}
     </tr>)}
     </tbody>
     </table>
+    </div>
     <AddRoom roomsRef={this.roomsRef} rooms={this.state.rooms} user={this.props.user}/>
-    <button onClick={(e)=> this.handleRoomSettings(e)}>{this.state.roomSettings == true?<div>Return</div>:<div>Room Settings</div>}</button>
+    <div className="divider">
+    </div>
     <AddPrivateRoom roomsRef={this.roomsRef} rooms={this.state.rooms} user={this.props.user} isAdmin={this.props.isAdmin}/>
       </div>
     )

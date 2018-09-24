@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import './AddPrivateRoom.css';
 
 class AddPrivateRoom extends Component {
   constructor(props) {
@@ -25,7 +25,8 @@ createRoom(e) {
        access: "Private",
        authorizedUsers: this.state.authorizedUsers
     });
-    this.setState({ newRoomName: "" })
+    this.setState({ newRoomName: "",
+  areUsersBeingInputted: false })
       }
 
 handleChange(e) {
@@ -53,9 +54,10 @@ renderUserSelection() {
     <div>
        <form onSubmit={(e) => this.addUser(e)}>
           <input type="text" onChange= { (e) => this.handleUserChange(e) } value={this.state.pendingAuthorizedUser}/>
-          <input type="Submit" value="Add" readOnly />
+          <input type="Submit" value="Add" readOnly className="btn btn-dark"/>
+          <button onClick={() => this.returnToDefault()} className="btn btn-light">Return </button>
        </form>
-       <table>
+       <table className="table table-bordered">
        <colgroup>
        <col id="Users" />
        </colgroup>
@@ -66,6 +68,10 @@ renderUserSelection() {
        </table>
     </div>
   )
+}
+
+returnToDefault() {
+  this.setState({ areUsersBeingInputted: false})
 }
 
 handleUserSelection() {
@@ -83,10 +89,10 @@ isUserAdmin() {
     <h3> Admin Controls </h3>
     <form onSubmit={(e) => this.createRoom(e)}>
       <input type="text"  value={ this.state.newRoomName } onChange={ (e) => this.handleChange(e)}/>
-      <input type="Submit" readOnly value="Create Private Room"/>
+      <input type="Submit" readOnly value="Create Private Room" className="btn btn-light"/>
     </form>
     <div>
-    {this.state.areUsersBeingInputted == true?(this.renderUserSelection()):<button onClick={()=> this.handleUserSelection()}> Change Allowed Users </button>}
+    {this.state.areUsersBeingInputted == true?(this.renderUserSelection()):<button className="btn btn-light" onClick={()=> this.handleUserSelection()}> Change Allowed Users </button>}
     </div>
   </div> )
   }

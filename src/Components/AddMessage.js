@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './AddMessage.css';
 
 
 class AddMessage extends Component {
@@ -31,9 +32,13 @@ class AddMessage extends Component {
   render(){
     return(
       <div>
-      {this.props.activeRoom != ""?<form onSubmit={(e) => this.createMessage(e)} >
-    <input type="text" value={ this.state.newMessage } onChange={(e) => this.handleChange(e)} />
-    <input type="submit" value="Send" />
+      {this.props.activeRoom != ""?<form onSubmit={(e) => this.createMessage(e)} className="form-horizontal" >
+      <div className="input-group" >
+    <input type="text" value={ this.state.newMessage } onChange={(e) => this.handleChange(e)} className="form-control"/>
+    <span className="input-group-btn">
+    <input type="submit" value="Send" className="btn btn-dark" />
+    </span>
+    </div>
     </form>: ""}
 
   </div>)
